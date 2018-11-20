@@ -16,6 +16,7 @@ public class SensorService {
     @Qualifier("mysql")
     private SensorDao sensorDao;
 
+
     public Collection<Sensor> getAllSensors(){
         return this.sensorDao.getAllSensors();
     }

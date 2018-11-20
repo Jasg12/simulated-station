@@ -29,12 +29,13 @@ public class MysqlSensorDaoimp implements SensorDao {
             @Override
             public Sensor mapRow(ResultSet resultSet, int i) throws SQLException {
                 Sensor sensor = new Sensor();
-                sensor.setId(resultSet.getInt("id"));
-                sensor.setName(resultSet.getString("name"));
-                sensor.setType(resultSet.getString("type"));
-                sensor.setLocation(resultSet.getString("location"));
-                return sensor;
-            }
+                {
+                    sensor.setId(resultSet.getInt("id"));
+                    sensor.setName(resultSet.getString("name"));
+                    sensor.setType(resultSet.getString("type"));
+                    sensor.setLocation(resultSet.getString("location"));
+                    return sensor;
+                } }
         });
         return sensors;
     }
@@ -45,6 +46,7 @@ public class MysqlSensorDaoimp implements SensorDao {
     }
 
     @Override
+
     public void removeSensorById(int id) {
 
     }
@@ -58,4 +60,5 @@ public class MysqlSensorDaoimp implements SensorDao {
     public void insertSensor(Sensor sensor) {
 
     }
+
 }

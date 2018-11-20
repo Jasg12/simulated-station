@@ -7,15 +7,13 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Date;
 
 @Repository
 @Qualifier("fakedata")
 public class FakeSensorDaoImp implements SensorDao {
     private static Map<Integer, Sensor> sensors;
 
-    static {
-        sensors = new HashMap<Integer, Sensor>(){
+    static { sensors = new HashMap<Integer, Sensor>(){
             {
                 put(1, new Sensor(1,"S1","temperature", "Street 1"));
                 put(2, new Sensor(2,"S2","temperature", "Street 2"));

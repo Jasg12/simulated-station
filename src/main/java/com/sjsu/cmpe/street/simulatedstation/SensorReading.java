@@ -24,7 +24,13 @@ public class SensorReading extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 Random rannum= new Random();
                 int x = rannum.nextInt(98);
+                int y = rannum.nextInt(30)+50;
+                int z = rannum.nextInt(7);
                 JOptionPane.showMessageDialog(null,x+"Degrees fahrenheit","Temperature at "+Locationenteringfield.getText(),
+                        JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(null,y+"%","humidity at "+Locationenteringfield.getText(),
+                        JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(null,z+"miles/hour","wind speed at "+Locationenteringfield.getText(),
                         JOptionPane.PLAIN_MESSAGE);
             }
         });
