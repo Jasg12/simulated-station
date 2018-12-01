@@ -1,9 +1,20 @@
 package com.sjsu.cmpe.sstreet.simulatedstation;
 
+
+import com.mysql.cj.jdbc.exceptions.ConnectionFeatureNotAvailableException;
+import org.springframework.data.jpa.repository.Query;
+
+import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import javax.swing.*;
 import java.awt.event.*;
+import java.sql.*;
 import java.util.*;
 import javax.swing.JPanel;
+
+import static org.hibernate.hql.internal.antlr.SqlTokenTypes.*;
 
 public class MyGui extends JFrame   {
     private JPanel newSensorrootpanel;
@@ -20,52 +31,37 @@ public class MyGui extends JFrame   {
     private JButton Updatebutton;
     private JButton Deletebutton;
     private JLabel Sensorlabel;
+    private JTextField Sensoridtextfield;
+    private JLabel SensoridLabel;
     private final static List<Contact> sensorbook = new ArrayList<Contact>();
 
     public MyGui() {
         super("Sensor panel");
-        SensornametextField.addActionListener(new ActionListener() {
-            /**
-             * Invoked when an action occurs.
-             *
-             * @param e the event to be processed
-             */
+        Addbutton.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
 
-            }
-        });
-        SensornametextField.addKeyListener(new KeyAdapter() {
-            /**
-             * Invoked when a key has been typed.
-             * This event occurs when a key press is followed by a key release.
-             *
-             * @param e
-             */
-            @Override
-            public void keyTyped(KeyEvent e) {
-                super.keyTyped(e);
-            }
-        });
-        Addbutton.addActionListener(new ActionListener() {
-            /**
-             * Invoked when an action occurs.
-             *
-             * @param e the event to be processed
-             */
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int i;
-                sensorbook.add(new Contact(SensornametextField.getText(),Locationtextfield.getText(),
-                        Typetextfield.getText()));
-                for(i=0;i<sensorbook.size();i++)
-                {
-                JOptionPane.showMessageDialog(null,"Sensor name is"+sensorbook.get(i).getSensorname(),"Sensor"+(i),
-                        JOptionPane.PLAIN_MESSAGE);
-                JOptionPane.showMessageDialog(null,"Sensor type is"+sensorbook.get(i).getType(),"Sensor"+(i),
-                        JOptionPane.PLAIN_MESSAGE );
-                JOptionPane.showMessageDialog(null,"Sensor location is"+sensorbook.get(i).getLocation(),"Sensor"+(i),
-                        JOptionPane.PLAIN_MESSAGE);}
+                    try {
+                        theQuery("INSERT into sensors.sensorbook (Sensorid,name,location,type) values('" + Sensoridtextfield.getText()+"','"+
+                                SensornametextField.getText() +"','"+
+                                Locationtextfield.getText() +"','"+ Typetextfield.getText()+"')");
+
+                    }
+                        catch (Exception ex){ }
+                        {
+                        }
+               // int i;
+                //sensorbook.add(new Contact(SensornametextField.getText(),Locationtextfield.getText(),
+                  //      Typetextfield.getText()));
+                //for(i=0;i<sensorbook.size();i++)
+                //{
+                //JOptionPane.showMessageDialog(null,"Sensor name is"+sensorbook.get(i).getSensorname(),"Sensor"+(i),
+                  //      JOptionPane.PLAIN_MESSAGE);
+                //JOptionPane.showMessageDialog(null,"Sensor type is"+sensorbook.get(i).getType(),"Sensor"+(i),
+                  //      JOptionPane.PLAIN_MESSAGE );
+                //JOptionPane.showMessageDialog(null,"Sensor location is"+sensorbook.get(i).getLocation(),"Sensor"+(i),
+                  //      JOptionPane.PLAIN_MESSAGE);}
             }
         });
         Deletebutton.addMouseListener(new MouseAdapter() {
@@ -79,20 +75,23 @@ public class MyGui extends JFrame   {
                 super.mouseClicked(e);
             }
         });
-        Updatebutton.addComponentListener(new ComponentAdapter() {
-        });
-        Updatebutton.addMouseListener(new MouseAdapter() {
-            /**
-             * {@inheritDoc}
-             *
-             * @param e
-             */
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-            }
-        });
+
+
         Updatebutton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               try{
+                   theQuery("update sensors.sensorbook set Sensorid = '"+Sensoridtextfield.getText()+"',name= '"+SensornametextField.getText()+"',location= '" +
+                           Locationtextfield.getText()+"', type= '"+Typetextfield.getText()+"' where Sensorid = "+Sensoridtextfield.getText());
+               }
+
+                catch (Exception ex){ }
+
+
+                }
+        });
+        Deletebutton.addActionListener(new ActionListener() {
             /**
              * Invoked when an action occurs.
              *
@@ -100,6 +99,10 @@ public class MyGui extends JFrame   {
              */
             @Override
             public void actionPerformed(ActionEvent e) {
+                try{
+                    theQuery("delete from sensors.sensorbook where Sensorid =" +Sensoridtextfield.getText());
+                }
+                catch (Exception ex){ }
 
             }
         });
@@ -114,17 +117,7 @@ public class MyGui extends JFrame   {
 
             }
         });
-        Deletebutton.addActionListener(new ActionListener() {
-            /**
-             * Invoked when an action occurs.
-             *
-             * @param e the event to be processed
-             */
-            @Override
-            public void actionPerformed(ActionEvent e) {
 
-            }
-        });
         Locationtextfield.addActionListener(new ActionListener() {
             /**
              * Invoked when an action occurs.
@@ -148,7 +141,21 @@ public class MyGui extends JFrame   {
             }
         });
 
-    } public static void main(String[] args) {
+    }
+    public void theQuery(String query)
+    {
+        try{
+            //Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sensors?autoReconnect=true&useSSL=false","root","anjala");
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate(query);
+            JOptionPane.showMessageDialog(null,"Query Executed" );
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null,ex.getMessage() );
+        }
+    }
+
+    public static void main(String[] args) {
         JFrame frame = new JFrame("MyGui");
         frame.setContentPane(new MyGui().newSensorrootpanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
