@@ -2,6 +2,7 @@ package com.sjsu.cmpe.sstreet.simulatedstation;
 
 
 import com.mysql.cj.jdbc.exceptions.ConnectionFeatureNotAvailableException;
+import com.sjsu.cmpe.sstreet.simulatedstation.service.Smartnodegui;
 import org.springframework.data.jpa.repository.Query;
 
 import java.sql.*;
