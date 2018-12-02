@@ -5,26 +5,53 @@ package com.sjsu.cmpe.sstreet.simulatedstation.service;
 
 import com.sjsu.cmpe.sstreet.simulatedstation.repository.mysql.*;
 import com.sjsu.cmpe.sstreet.simulatedstation.model.*;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.net.URL;
+import java.util.*;
 
 @Service
 public class SmartClusterService {
+
+    @Value(value = "${cluster.make:unknown}")
+    private String clusterMake;
+    @Value(value = "${cluster.model:unknown}")
+    private String clusterModel;
+    @Value(value = "${cluster.name:unknown}")
+    private String clusterName;
+    @Value(value = "${cluster.url:unknown}")
+    private String url;
+    @Value(value = "${cluster.location.longitude:unknown}")
+    private double clusterLongitude;
+    @Value(value = "${cluster.location.latitude:unknown}")
+    private double clusterLatitude;
+    @Value(value = "${cluster.location.state:unknown}")
+    private String clusterState;
+    @Value(value = "${cluster.location.city:unknown}")
+    private String clusterCity;
+    @Value(value = "${cluster.location.street:unknown}")
+    private String clusterStreet;
+    @Value(value = "${cluster.location.zipCode:unknown}")
+    private Integer clusterZipCode;
 
     private SmartClusterRepository smartClusterRepository;
 
     private SmartNodeService smartNodeService;
 
+    private Logger log;
+
+
     @Autowired
-    public SmartClusterService(SmartClusterRepository smartClusterRepository, SmartNodeService smartNodeService) {
+    public SmartClusterService(SmartClusterRepository smartClusterRepository, SmartNodeService smartNodeService, Logger log) {
+
         this.smartClusterRepository = smartClusterRepository;
         this.smartNodeService = smartNodeService;
+        this.log = log;
     }
 
     public ResponseEntity<String> createSmartCluster(SmartCluster smartCluster) {
@@ -41,10 +68,14 @@ public class SmartClusterService {
 
     }
 
-    public ResponseEntity<String> updateSmartCluster(SmartCluster smartCluster){
+    public SmartCluster update(SmartCluster smartCluster){
+        if (smartCluster.getInternalId() == null){
+            throw new IllegalArgumentException("Can't update non-existing entity");
+        }
 
+        return smartClusterRepository.save(smartCluster);
 
-        Optional<SmartCluster> smartClusterResult = smartClusterRepository.findById(smartCluster.getIdSmartCluster());
+        /*Optional<SmartCluster> smartClusterResult = smartClusterRepository.findById(smartCluster.getIdSmartCluster());
 
         smartClusterResult.ifPresent(result->{
             smartCluster.setName(result.getName());
@@ -65,7 +96,7 @@ public class SmartClusterService {
 
         }else{
             return new ResponseEntity<>("Smart Cluster with ID: " + smartCluster.getIdSmartCluster()+" does not exist",HttpStatus.BAD_REQUEST);
-        }
+        }*/
 
     }
 
@@ -155,6 +186,29 @@ public class SmartClusterService {
 
     }
 
+    public SmartCluster getSmartCluster(){
 
+        Iterable<SmartCluster> clusters = smartClusterRepository.findAll();
+        Iterator<SmartCluster> clustersIterator = clusters.iterator();
+        if(clustersIterator.hasNext()){
+            return clustersIterator.next();
+        }
+
+        return null;
+    }
+
+    public SmartCluster initiateCluster(){
+        SmartCluster smartCluster = new SmartCluster();
+        smartCluster.setInstallationDate(new Date());
+        smartCluster.setMake(clusterMake);
+        smartCluster.setModel(clusterModel);
+        smartCluster.setName(clusterName);
+        smartCluster.setUrl(url);
+        Location location = new Location(clusterLongitude, clusterLatitude, clusterState, clusterCity, clusterStreet, clusterZipCode);
+        smartCluster.setLocation(location);
+        smartCluster = smartClusterRepository.save(smartCluster);
+
+        return smartCluster;
+    }
 
 }

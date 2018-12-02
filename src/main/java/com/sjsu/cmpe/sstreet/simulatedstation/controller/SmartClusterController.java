@@ -26,10 +26,10 @@ public class SmartClusterController {
         return smartClusterService.createSmartCluster(smartCluster);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/update")
-    public @ResponseBody ResponseEntity<String> updateSmartCluster(@RequestBody SmartCluster smartCluster){
+    @RequestMapping(method = RequestMethod.PUT, value = "/update", produces = "application/json")
+    public SmartCluster updateSmartCluster(@RequestBody SmartCluster smartCluster){
 
-        return smartClusterService.updateSmartCluster(smartCluster);
+        return smartClusterService.update(smartCluster);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/get/all")
