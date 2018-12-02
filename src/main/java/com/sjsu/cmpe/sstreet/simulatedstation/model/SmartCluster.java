@@ -1,5 +1,7 @@
 package com.sjsu.cmpe.sstreet.simulatedstation.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.net.URL;
 import java.util.Date;
@@ -11,6 +13,9 @@ public class SmartCluster {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
+    @JsonIgnore
+    private Integer internalId;
+
     private Integer idSmartCluster;
 
     private String name;
@@ -124,5 +129,15 @@ public class SmartCluster {
     public void setNodes(List<SmartNode> nodes) {
 
         this.nodes = nodes;
+    }
+
+    public Integer getInternalId() {
+
+        return internalId;
+    }
+
+    public void setInternalId(Integer internalId) {
+
+        this.internalId = internalId;
     }
 }

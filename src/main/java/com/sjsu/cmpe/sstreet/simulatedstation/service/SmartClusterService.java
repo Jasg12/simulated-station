@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -155,6 +156,16 @@ public class SmartClusterService {
 
     }
 
+    public SmartCluster getSmartCluster(){
+
+        Iterable<SmartCluster> clustres = smartClusterRepository.findAll();
+        Iterator<SmartCluster> clustersIterator = clustres.iterator();
+        if(clustersIterator.hasNext()){
+            return clustersIterator.next();
+        }
+
+        return null;
+    }
 
 
 }
