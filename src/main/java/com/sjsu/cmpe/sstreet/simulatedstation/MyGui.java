@@ -34,6 +34,9 @@ public class MyGui extends JFrame   {
     private JLabel Sensorlabel;
     private JTextField Sensoridtextfield;
     private JLabel SensoridLabel;
+    private JTextField make;
+    private JTextField model;
+    private JTextField instdate;
     private final static List<Contact> sensorbook = new ArrayList<Contact>();
 
     public MyGui() {
@@ -44,7 +47,7 @@ public class MyGui extends JFrame   {
             public void actionPerformed(ActionEvent e) {
 
                     try {
-                        theQuery("INSERT into sensors.sensorbook (Sensorid,name,location,type) values('" + Sensoridtextfield.getText()+"','"+
+                        theQuery("INSERT into sensors.sensorbook (Sensorid,name,make,model,instadate,location,type) values('" + Sensoridtextfield.getText()+"','"+
                                 SensornametextField.getText() +"','"+
                                 Locationtextfield.getText() +"','"+ Typetextfield.getText()+"')");
 
@@ -83,7 +86,11 @@ public class MyGui extends JFrame   {
             @Override
             public void actionPerformed(ActionEvent e) {
                try{
-                   theQuery("update sensors.sensorbook set Sensorid = '"+Sensoridtextfield.getText()+"',name= '"+SensornametextField.getText()+"',location= '" +
+                   theQuery("update sensors.sensorbook set Sensorid = '"+Sensoridtextfield.getText()+"',name= '"+SensornametextField.getText()+
+                           "',make= '" +
+                           make.getText()+ "',model= '" +
+                           model.getText()+ "',instdate= '" +
+                           instdate.getText()+"',location= '" +
                            Locationtextfield.getText()+"', type= '"+Typetextfield.getText()+"' where Sensorid = "+Sensoridtextfield.getText());
                }
 
