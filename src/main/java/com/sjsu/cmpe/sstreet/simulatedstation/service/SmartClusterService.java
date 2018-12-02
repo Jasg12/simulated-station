@@ -21,7 +21,7 @@ public class SmartClusterService {
     private String clusterModel;
     @Value(value = "${cluster.name:unknown}")
     private String clusterName;
-    @Value(value = "$mirroring.server.url{:unknown}")
+    @Value(value = "${mirroring.server.url:unknown}")
     private String url;
     @Value(value = "${cluster.location.longitude:unknown}")
     private double clusterLongitude;

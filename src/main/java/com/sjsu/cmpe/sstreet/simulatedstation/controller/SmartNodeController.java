@@ -2,6 +2,7 @@ package com.sjsu.cmpe.sstreet.simulatedstation.controller;
 
 import com.sjsu.cmpe.sstreet.simulatedstation.model.*;
 import com.sjsu.cmpe.sstreet.simulatedstation.service.*;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +14,12 @@ import java.util.List;
 public class SmartNodeController {
 
     private final SmartNodeService smartNodeService;
+    private Logger log;
 
     @Autowired
-    public SmartNodeController(SmartNodeService smartNodeService) {
+    public SmartNodeController(SmartNodeService smartNodeService, Logger log) {
         this.smartNodeService = smartNodeService;
+        this.log = log;
     }
 
 
@@ -99,10 +102,10 @@ public class SmartNodeController {
         return smartNodeService.getUnregisteredNodes();
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/node/registered", produces = "application/json")
-    public SmartNode registeredNodes(@RequestBody SmartNode smartNode){
-
-        return smartNodeService.registeredNode(smartNode);
+    @RequestMapping(method = RequestMethod.PUT, value = "/node/registered", produces = "application/json")
+    public void registeredNodes(@RequestBody SmartNode smartNode){
+        log.info("Getting node registering event node:{}", smartNode);
+        smartNodeService.registeredNode(smartNode);
     }
 
 }

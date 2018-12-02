@@ -1,5 +1,7 @@
 package com.sjsu.cmpe.sstreet.simulatedstation.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,6 +10,9 @@ public class Location {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
+    @JsonIgnore
+    private Integer internalId;
+
     private Integer IdLocation;
 
     private double longitude;
@@ -122,5 +127,15 @@ public class Location {
     public void setZipCode(Integer zipCode) {
 
         this.zipCode = zipCode;
+    }
+
+    public Integer getInternalId() {
+
+        return internalId;
+    }
+
+    public void setInternalId(Integer internalId) {
+
+        this.internalId = internalId;
     }
 }

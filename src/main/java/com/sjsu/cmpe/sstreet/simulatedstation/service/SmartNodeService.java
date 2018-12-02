@@ -5,10 +5,12 @@ import com.sjsu.cmpe.sstreet.simulatedstation.model.*;
 import com.sjsu.cmpe.sstreet.simulatedstation.repository.data_from_sensors.ISensorDataRepository;
 import com.sjsu.cmpe.sstreet.simulatedstation.repository.data_from_sensors.SensorDataRepository;
 import com.sjsu.cmpe.sstreet.simulatedstation.repository.mysql.*;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import sun.util.resources.cldr.sah.LocaleNames_sah;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,16 +20,23 @@ import java.util.Optional;
 public class SmartNodeService {
 
     private SmartNodeRepository smartNodeRepository;
-
     private ISensorDataRepository sensorDataRepository;
-
     private SensorService sensorService;
+    private Logger log;
+    private LocationRepository locationRepository;
 
     @Autowired
-    public SmartNodeService(SmartNodeRepository smartNodeRepository, SensorService sensorService) {
+    public SmartNodeService(
+        SmartNodeRepository smartNodeRepository,
+        SensorService sensorService,
+        Logger log,
+        LocationRepository locationRepository)
+    {
         this.smartNodeRepository = smartNodeRepository;
         this.sensorDataRepository = new SensorDataRepository();
         this.sensorService = sensorService;
+        this.log = log;
+        this.locationRepository = locationRepository;
     }
 
     public ResponseEntity<String> createSmartNode(SmartNode smartNode) {
@@ -185,11 +194,15 @@ public class SmartNodeService {
     public SmartNode registeredNode(SmartNode node){
 
         SmartNode savedNode = smartNodeRepository.findByName(node.getName()).get();
+        Location location = savedNode.getLocation();
+        location.setIdLocation(node.getLocation().getIdLocation());
+        locationRepository.save(location);
 
         if(savedNode != null){
             savedNode.setIdSmartNode(node.getIdSmartNode());
             savedNode.setRegistered(true);
         }
+        log.info("Node registered successfully node:{}", savedNode);
 
         return smartNodeRepository.save(savedNode);
     }

@@ -1,6 +1,8 @@
 package com.sjsu.cmpe.sstreet.simulatedstation.service;
 
+import com.sjsu.cmpe.sstreet.simulatedstation.model.Location;
 import com.sjsu.cmpe.sstreet.simulatedstation.model.SmartCluster;
+import com.sjsu.cmpe.sstreet.simulatedstation.repository.mysql.LocationRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,13 +19,15 @@ public class RegisteringService {
     private final String REGISTER_CLUSTER_API = "/smart_cluster/create";
 
     private SmartClusterService smartClusterService;
+    private LocationRepository locationRepository;
     private RestTemplate restTemplate;
     private Logger log;
 
     @Autowired
-    public RegisteringService(SmartClusterService smartClusterService, RestTemplate restTemplate, Logger log) {
+    public RegisteringService(SmartClusterService smartClusterService, LocationRepository locationRepository, RestTemplate restTemplate, Logger log) {
 
         this.smartClusterService = smartClusterService;
+        this.locationRepository = locationRepository;
         this.restTemplate = restTemplate;
         this.log = log;
     }
@@ -44,6 +48,9 @@ public class RegisteringService {
         SmartCluster registeredSmartCluster = restTemplate.postForObject(url, httpEntity, SmartCluster.class);
         smartCluster.setIdSmartCluster(registeredSmartCluster.getIdSmartCluster());
         smartCluster.setRegistered(true);
+        Location location = smartCluster.getLocation();
+        location.setIdLocation(registeredSmartCluster.getLocation().getIdLocation());
+        locationRepository.save(location);
 
         smartClusterService.update(smartCluster);
         log.info("New cluster registered in cloud successfully cluster:{}", smartCluster);

@@ -168,4 +168,24 @@ public class SmartNode {
 
         this.registered = registered;
     }
+
+    @Override
+    public String toString(){
+        StringBuffer sb = new StringBuffer();
+        sb
+            .append("\n")
+            .append("{" + "\n")
+            .append("    idSmartNode:" + idSmartNode + "\n")
+            .append("    name:" + name + "\n")
+            .append("    model:" + model + "\n")
+            .append("    make:" + make + "\n")
+            .append("    registered:" + registered + "\n")
+            .append("    installationDate:" + installationDate + "\n")
+            .append("    locationId:" + (location != null?location.getIdLocation():"null") + "\n")
+            .append("    clusterId:" + (smartCluster != null?smartCluster.getIdSmartCluster():"null") + "\n")
+            .append("    sensors:" + (sensors != null?sensors.size():0) + "\n")
+            .append("}" + "\n");
+
+        return sb.toString();
+    }
 }
