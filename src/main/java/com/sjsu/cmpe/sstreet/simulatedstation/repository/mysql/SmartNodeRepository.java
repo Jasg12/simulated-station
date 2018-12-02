@@ -19,4 +19,6 @@ public interface SmartNodeRepository extends CrudRepository<SmartNode, Integer> 
 
     void deleteBySmartCluster(SmartCluster smartCluster);
 
+    List<SmartNode> findAllByRegistered(Boolean registered);
+
 }

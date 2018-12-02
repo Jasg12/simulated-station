@@ -1,5 +1,7 @@
 package com.sjsu.cmpe.sstreet.simulatedstation.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +12,9 @@ public class SmartNode {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
+    @JsonIgnore
+    private Integer internalId;
+
     private Integer idSmartNode;
 
     private String name;
@@ -19,6 +24,9 @@ public class SmartNode {
     private String make;
 
     private Date installationDate;
+
+    @JsonIgnore
+    private Boolean registered = false;
 
     @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name="location_idlocation", unique= true, nullable=true, insertable=true, updatable=true)
@@ -139,5 +147,25 @@ public class SmartNode {
     public void setSensors(List<Sensor> sensors) {
 
         this.sensors = sensors;
+    }
+
+    public Integer getInternalId() {
+
+        return internalId;
+    }
+
+    public void setInternalId(Integer internalId) {
+
+        this.internalId = internalId;
+    }
+
+    public Boolean getRegistered() {
+
+        return registered;
+    }
+
+    public void setRegistered(Boolean registered) {
+
+        this.registered = registered;
     }
 }

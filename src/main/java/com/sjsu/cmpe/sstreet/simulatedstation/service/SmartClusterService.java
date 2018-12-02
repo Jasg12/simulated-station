@@ -1,8 +1,5 @@
 package com.sjsu.cmpe.sstreet.simulatedstation.service;
 
-
-
-
 import com.sjsu.cmpe.sstreet.simulatedstation.repository.mysql.*;
 import com.sjsu.cmpe.sstreet.simulatedstation.model.*;
 import org.slf4j.Logger;
@@ -24,7 +21,7 @@ public class SmartClusterService {
     private String clusterModel;
     @Value(value = "${cluster.name:unknown}")
     private String clusterName;
-    @Value(value = "${cluster.url:unknown}")
+    @Value(value = "$mirroring.server.url{:unknown}")
     private String url;
     @Value(value = "${cluster.location.longitude:unknown}")
     private double clusterLongitude;

@@ -93,5 +93,16 @@ public class SmartNodeController {
         return smartNodeService.getSmartNodeDataTest();
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/nodes/unregistered", produces = "application/json")
+    public List<SmartNode> getUnregisteredNodes(){
+
+        return smartNodeService.getUnregisteredNodes();
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/node/registered", produces = "application/json")
+    public SmartNode registeredNodes(@RequestBody SmartNode smartNode){
+
+        return smartNodeService.registeredNode(smartNode);
+    }
 
 }

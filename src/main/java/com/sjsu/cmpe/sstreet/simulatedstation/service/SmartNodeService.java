@@ -177,5 +177,20 @@ public class SmartNodeService {
         return (new SmartNodeData(9, sensorDataList));
     }
 
+    public List<SmartNode> getUnregisteredNodes(){
 
+        return smartNodeRepository.findAllByRegistered(false);
+    }
+
+    public SmartNode registeredNode(SmartNode node){
+
+        SmartNode savedNode = smartNodeRepository.findByName(node.getName()).get();
+
+        if(savedNode != null){
+            savedNode.setIdSmartNode(node.getIdSmartNode());
+            savedNode.setRegistered(true);
+        }
+
+        return smartNodeRepository.save(savedNode);
+    }
 }
