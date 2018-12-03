@@ -37,17 +37,25 @@ public class SmartClusterService {
     private Integer clusterZipCode;
 
     private SmartClusterRepository smartClusterRepository;
-
     private SmartNodeService smartNodeService;
+    private LocationRepository locationRepository;
+    private MirroringServerService mirroringServerService;
 
     private Logger log;
 
 
     @Autowired
-    public SmartClusterService(SmartClusterRepository smartClusterRepository, SmartNodeService smartNodeService, Logger log) {
+    public SmartClusterService(
+        SmartClusterRepository smartClusterRepository,
+        SmartNodeService smartNodeService,
+        LocationRepository locationRepository,
+        MirroringServerService mirroringServerService,
+        Logger log) {
 
         this.smartClusterRepository = smartClusterRepository;
         this.smartNodeService = smartNodeService;
+        this.locationRepository = locationRepository;
+        this.mirroringServerService = mirroringServerService;
         this.log = log;
     }
 
@@ -66,35 +74,27 @@ public class SmartClusterService {
     }
 
     public SmartCluster update(SmartCluster smartCluster){
-        if (smartCluster.getInternalId() == null){
-            throw new IllegalArgumentException("Can't update non-existing entity");
-        }
+        SmartCluster currentCluster = getSmartCluster();
+        currentCluster.setName(smartCluster.getName());
+        currentCluster.setModel(smartCluster.getModel());
+        currentCluster.setMake(smartCluster.getMake());
+        currentCluster.setUrl(smartCluster.getUrl());
+        currentCluster.setIdSmartCluster(smartCluster.getIdSmartCluster());
 
-        return smartClusterRepository.save(smartCluster);
+        Location currentLocation = currentCluster.getLocation();
+        currentLocation.setIdLocation(smartCluster.getLocation().getIdLocation());
+        currentLocation.setState(smartCluster.getLocation().getState());
+        currentLocation.setCity(smartCluster.getLocation().getCity());
+        currentLocation.setStreet(smartCluster.getLocation().getStreet());
+        currentLocation.setLatitude(smartCluster.getLocation().getLatitude());
+        currentLocation.setLongitude(smartCluster.getLocation().getLongitude());
+        currentLocation.setZipCode(smartCluster.getLocation().getZipCode());
+        locationRepository.save(currentLocation);
+        SmartCluster savedCluster = smartClusterRepository.save(currentCluster);
+        log.info("Locally update cluster:{}", savedCluster);
+        mirroringServerService.updateCluster(savedCluster);
 
-        /*Optional<SmartCluster> smartClusterResult = smartClusterRepository.findById(smartCluster.getIdSmartCluster());
-
-        smartClusterResult.ifPresent(result->{
-            smartCluster.setName(result.getName());
-            smartCluster.setMake(result.getMake());
-            smartCluster.setModel(result.getModel());
-            smartCluster.setInstallationDate(result.getInstallationDate());
-
-        });
-
-        if(smartClusterResult.isPresent()){
-
-            if(null != smartClusterRepository.save(smartCluster)){
-                return ResponseEntity.ok("Smart Cluster updated");
-
-            }else{
-                return new ResponseEntity<>("Smart Cluster  Failed",HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-
-        }else{
-            return new ResponseEntity<>("Smart Cluster with ID: " + smartCluster.getIdSmartCluster()+" does not exist",HttpStatus.BAD_REQUEST);
-        }*/
-
+        return savedCluster;
     }
 
     public List<SmartCluster> getAllSmartClusters(){

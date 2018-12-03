@@ -1,0 +1,70 @@
+body{
+    /*padding-top: 60px;*/
+    height: 100%;
+}
+.bg {
+    position: absolute;
+    width: 100%;
+    /* The image used */
+    /*background-image: url("../images/background-img.jpg");*/
+
+    /* Full height */
+    height: 100%;
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 1.0;
+}
+.container-custom{
+    padding-top: 60px;
+}
+.form-inline .input-group{
+    margin-right: 15px !important;
+}
+.zip-group{
+    width: 115px;
+}
+.state-group{
+    width: 110px;
+}
+.city-group{
+    width: 175px;
+}
+.user-dashboard-container{
+    margin-top: 40px;
+}
+.table-data-view{
+    margin-top: 30px;
+}
+.map-data-view{
+    margin-top: 30px;
+}
+.connectivity-data-view{
+    margin-top: 30px;
+}
+.sensor-data-view{
+    margin-top: 30px;
+}
+.disabled{
+    display: none;
+}
+#map{
+    height: 550px;
+}
+.legend-img{
+    height: 20px;
+}
+.map-legend{
+    margin-top: 20px;
+}
+.node-group{
+    width: 125px;
+}
+.sensor-group{
+    width: 125px;
+}
+.date-group{
+    width: 165px;
+}

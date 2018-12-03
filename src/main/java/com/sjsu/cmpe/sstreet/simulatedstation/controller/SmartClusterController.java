@@ -75,5 +75,15 @@ public class SmartClusterController {
         return smartClusterService.getSmartClusterData(smartCluster);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/", produces = "application/json")
+    public SmartCluster getSmartClusterData(){
 
+        return smartClusterService.getSmartCluster();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/is/registered")
+    public Boolean getRegisteredStatus(){
+
+        return smartClusterService.getSmartCluster().getRegistered();
+    }
 }

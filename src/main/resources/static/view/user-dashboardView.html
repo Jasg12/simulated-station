@@ -1,0 +1,141 @@
+<div class="user-dashboard-container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-6">
+            <form class="form-inline">
+                <div class="input-group zip-group">
+                    <span class="input-group-addon" id="zip">Zip</span>
+                    <input ng-model="zip" type="text" class="form-control" >
+                </div>
+                <div class="input-group state-group">
+                    <select id="state" class="form-control" ng-model="state" ng-change="stateChange()" required>
+                        <option value="" selected hidden>State</option>
+                        <option value="CA">CA</option>
+                    </select>
+                </div>
+                <div class="input-group city-group">
+                    <select id="city" class="form-control" ng-model="city" ng-change="cityChange()" required>
+                        <option value="" selected hidden>City</option>
+                        <option value="{{city}}" ng-repeat="city in cityList">{{city}}</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-3">
+            <form class="form-inline">
+                <select ng-model="viewSelector" ng-change="viewChanged()" class="form-control">
+                    <option>Statistics</option>
+                    <option>Map View</option>
+                    <option>Connectivity View</option>
+                    <option>Sensor Data View</option>
+                </select>
+            </form>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+    <div class="row table-data-view">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Street</th>
+                    <th># of clusters</th>
+                    <th># of nodes</th>
+                    <th># of sensors</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="street in streetStat">
+                    <th>{{street.name}}</th>
+                    <th>{{street.clusters}}</th>
+                    <th>{{street.nodes}}</th>
+                    <th>{{street.sensors}}</th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <div class="row map-data-view disabled">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div id="map"></div>
+            <div class="map-legend">
+                <img class="legend-img" src="image/cluster-icon.png"><span> - Smart Cluster</span>
+                <img class="legend-img" src="image/node-icon.png"><span> - Smart Node</span>
+                <img class="legend-img" src="image/sensor-icon.png"><span> - Sensor</span>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <div class="row connectivity-data-view disabled">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Street</th>
+                    <th>Cluster id</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="connectivity in connectivityStat">
+                    <th>{{connectivity.cluster.location.street}}</th>
+                    <th>{{connectivity.cluster.idSmartCluster}}</th>
+                    <th>{{connectivity.status}}</th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <div class="sensor-data-view disabled">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-6">
+                <form class="form-inline">
+                    <div class="input-group cluster-group">
+                        <select id="cluster" class="form-control" ng-model="cluster" ng-change="clusterChange()" required>
+                            <option value="" selected hidden>Cluster</option>
+                            <option value="{{cluster.idSmartCluster}}" ng-repeat="cluster in clusterList">{{cluster.name}}</option>
+                        </select>
+                    </div>
+                    <div class="input-group node-group">
+                        <select id="node" class="form-control" ng-model="node" ng-change="nodeChange()" required>
+                            <option value="" selected hidden>Node</option>
+                            <option value="{{node.idSmartNode}}" ng-repeat="node in nodeList">{{node.name}}</option>
+                        </select>
+                    </div>
+                    <div class="input-group sensor-group">
+                        <select id="sensor" class="form-control" ng-model="sensor" ng-change="sensorChange()" required>
+                            <option value="" selected hidden>Sensor</option>
+                            <option value="{{sensor.idSensor}}" ng-repeat="sensor in sensorList">{{sensor.name}}</option>
+                        </select>
+                    </div>
+                    <div class="input-group date-group"> <!-- Date input -->
+                        <!--<label class="control-label" for="date">Date</label>-->
+                        <span class="input-group-addon" id="basic-addon1">From</span>
+                        <input ng-model="fromDate" class="form-control" id="from-date" name="date" placeholder="MM/DD/YYY" type="text"/>
+                    </div>
+                    <div class="input-group date-group"> <!-- Date input -->
+                        <!--<label class="control-label" for="date">Date</label>-->
+                        <span class="input-group-addon" id="basic-addon2">To</span>
+                        <input ng-model="toDate" class="form-control" id="to-date" name="date" placeholder="MM/DD/YYY" type="text"/>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <button ng-click="showSensorData()" class="btn btn-primary">Get Sensor Data</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div id="chart-container"></div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,224 @@
+<div class="data-manager-dashboard-container">
+    <h1>This is the Data Manager Dashboard</h1>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <div class="row table-data-cluster-view">
+        <div class="col-md-2"></div>
+        <div class="col-md-6">
+            <form class="form-inline id="cluster">
+                <div class="input-group smartcluster-group">
+                    <span class="input-group-addon" id="smartcluster">Smart Cluster</span>
+                    <input  ng-model="smartcluster" placeholder="Smart Cluster id" type="text" class="form-control" >
+                </div>
+                <div class="input-group fromtimestamp-group">
+                    <span class="input-group-addon" >From Date</span>
+                    <input ng-model="from1" placeholder="MM/DD/YYY" type="text" class="form-control" >
+                </div>
+                <div class="input-group totimestamp-group">
+                    <span class="input-group-addon" >To Date</span>
+                    <input ng-model="to1" placeholder="MM/DD/YYY" type="text" class="form-control" >
+                </div>
+                <button class="btn btn-primary" type="submit" ng-click="search()">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row table-data-node-view">
+            <div class="col-md-2"></div>
+            <div class="col-md-6">
+                <form class="form-inline" id="node" >
+                    <div class="input-group smartnode-group">
+                        <span class="input-group-addon" id="smartnode">Smart Node</span>
+                        <input ng-model="smartnode" placeholder="Smart Node id" type="text" class="form-control" >
+                    </div>
+                    <div class="input-group fromtimestamp-group">
+                        <span class="input-group-addon" id="from">From Date</span>
+                        <input ng-model="from2" placeholder="MM/DD/YYY" type="text" class="form-control" >
+                    </div>
+                    <div class="input-group totimestamp-group">
+                        <span class="input-group-addon" id="to">To Date</span>
+                        <input ng-model="to2" placeholder="MM/DD/YYY" type="text" class="form-control" >
+                    </div>
+                    <button class="btn btn-primary" type="submit" ng-click="search1()">Search</button>
+                </form>
+            </div>
+    </div>
+    <div class="row table-data-sensor-view">
+                <div class="col-md-2"></div>
+                <div class="col-md-6">
+                    <form class="form-inline" id="sensor" >
+                        <div class="input-group sensor-group">
+                            <span class="input-group-addon" id="smartsensor">Sensor</span>
+                            <input ng-model="sensor" placeholder="Sensor id" type="text" class="form-control" >
+                        </div>
+                        <div class="input-group fromtimestamp-group">
+                            <span class="input-group-addon" >From Date</span>
+                            <input ng-model="from3" placeholder="MM/DD/YYY" type="text" class="form-control" >
+                        </div>
+                        <div class="input-group totimestamp-group">
+                            <span class="input-group-addon" >To Date</span>
+                            <input ng-model="to3" placeholder="MM/DD/YYY" type="text" class="form-control" >
+                        </div>
+                        <button class="btn btn-primary" type="submit" ng-click="search2()">Search</button>
+                    </form>
+                </div>
+    </div>
+
+                <div class="row" table-data-sensorid-view">>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-6">
+                        <form class="form-inline" id="sensordatabysensorid" >
+                            <div class="input-group sensor-group">
+                                <span class="input-group-addon" id="sensorid">Sensor</span>
+                                <input  type="text" class="form-control" >
+                            </div>
+                            <button class="btn btn-primary" type="submit" ng-click="search3()">Search</button>
+                        </form>
+                    </div>
+                </div>
+        <div class="col-md-3">
+            <form class="form-inline">
+                <select ng-model="viewSelector" ng-change="viewChanged()" class="form-control">
+                    <option>cluster</option>
+                    <option>node</option>
+                    <option>sensor</option>
+                    <option>Connectivity chart</option>
+                </select>
+            </form>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+
+    <div class="row table-data-cluster-view">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Smart cluster id</th>
+                    <th>Smart node id</th>
+                    <th>Type</th>
+                    <th>Timestamp</th>
+                    <th>Sensor id</th>
+                    <th>Sensor Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="sensor1 in content1">
+                    <th>{{sensor1.idSmartCluster}}</th>
+                    <th>{{sensor1.idSmartNode}}</th>
+                    <th>{{sensor1.type}}</th>
+                    <th>{{sensor1.timestamp}}</th>
+                    <th>{{sensor1.idSensor}}</th>
+                    <th>{{sensor1.value}}</th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+                  <div class="row table-data-node-view" >
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Smart cluster id</th>
+                                <th>Smart node id</th>
+                                <th>Type</th>
+                                <th>Timestamp</th>
+                                <th>Sensor id</th>
+                                <th>Sensor Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="sensor2 in content2">
+                                <th>{{sensor2.idSmartCluster}}</th>
+                                <th>{{sensor2.idSmartNode}}</th>
+                                <th>{{sensor2.type}}</th>
+                                <th>{{sensor2.timestamp}}</th>
+                                <th>{{sensor2.idSensor}}</th>
+                                <th>{{sensor2.value}}</th>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+
+                    <div class="row table-data-sensor-view">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Smart cluster id</th>
+                                <th>Smart node id</th>
+                                <th>Type</th>
+                                <th>Timestamp</th>
+                                <th>Sensor id</th>
+                                <th>Sensor Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="sensor3 in content3">
+                                <th>{{sensor3.idSmartCluster}}</th>
+                                <th>{{sensor3.idSmartNode}}</th>
+                                <th>{{sensor3.type}}</th>
+                                <th>{{sensor3.timestamp}}</th>
+                                <th>{{sensor3.idSensor}}</th>
+                                <th>{{sensor3.value}}</th>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+
+    <div class="row table-data-sensorid-view">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Smart cluster id</th>
+                    <th>Smart node id</th>
+                    <th>Type</th>
+                    <th>Sensor id</th>
+                    <th>Sensor Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="sensor4 in content4">
+                    <th>{{sensor4.idSmartCluster}}</th>
+                    <th>{{sensor4.idSmartNode}}</th>
+                    <th>{{sensor4.type}}</th>
+                    <th>{{sensor4.idSensor}}</th>
+                    <th>{{sensor4.value}}</th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+                <div class="row map-data-view disabled">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div id="map"></div>
+            <div class="map-legend">
+                <img class="legend-img" src="image/cluster-icon.png"><span> - Smart Cluster</span>
+                <img class="legend-img" src="image/node-icon.png"><span> - Smart Node</span>
+                <img class="legend-img" src="image/sensor-icon.png"><span> - Sensor</span>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
