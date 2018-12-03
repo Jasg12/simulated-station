@@ -2,15 +2,11 @@ package com.sjsu.cmpe.sstreet.simulatedstation.service;
 
 
 import com.sjsu.cmpe.sstreet.simulatedstation.model.*;
-import com.sjsu.cmpe.sstreet.simulatedstation.repository.data_from_sensors.ISensorDataRepository;
-import com.sjsu.cmpe.sstreet.simulatedstation.repository.data_from_sensors.SensorDataRepository;
 import com.sjsu.cmpe.sstreet.simulatedstation.repository.mysql.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import sun.util.resources.cldr.sah.LocaleNames_sah;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,11 +17,11 @@ import java.util.Optional;
 public class SmartNodeService {
 
     private SmartNodeRepository smartNodeRepository;
-    private ISensorDataRepository sensorDataRepository;
     private SensorService sensorService;
     private Logger log;
     private LocationRepository locationRepository;
     private MirroringServerService mirroringServerService;
+    private RegisteringService registeringService;
 
     @Autowired
     public SmartNodeService(
@@ -33,14 +29,15 @@ public class SmartNodeService {
         SensorService sensorService,
         Logger log,
         LocationRepository locationRepository,
-        MirroringServerService mirroringServerService)
+        MirroringServerService mirroringServerService,
+        RegisteringService registeringService)
     {
         this.smartNodeRepository = smartNodeRepository;
-        this.sensorDataRepository = new SensorDataRepository();
         this.sensorService = sensorService;
         this.log = log;
         this.locationRepository = locationRepository;
         this.mirroringServerService = mirroringServerService;
+        this.registeringService = registeringService;
     }
 
     public SmartNode createSmartNode(SmartNode node, SmartCluster cluster) {
@@ -49,8 +46,28 @@ public class SmartNodeService {
         location = locationRepository.save(location);
         node.setSmartCluster(cluster);
         node.setInstallationDate(new Date());
+        SmartNode savedNode = smartNodeRepository.save(node);
+        createSensorsForNode(savedNode);
 
-        return smartNodeRepository.save(node);
+        return savedNode;
+    }
+
+    private void createSensorsForNode(SmartNode node){
+        Location nodeLocation = node.getLocation();
+        Location temperatureSensorLocation = new Location(nodeLocation);
+        locationRepository.save(temperatureSensorLocation);
+        Sensor temperatureSensor = new Sensor("sensor-1", "temp-1", "IBM", new Date(), SensorType.TEMPERATURE, temperatureSensorLocation, node);
+        temperatureSensor = sensorService.createSensor(temperatureSensor);
+
+        Location windSpeedSensorLocation = new Location(nodeLocation);
+        locationRepository.save(windSpeedSensorLocation);
+        Sensor windSpeedSensor = new Sensor("sensor-2", "wind-speed-2", "IBM", new Date(), SensorType.WIND_SPEED, windSpeedSensorLocation, node);
+        windSpeedSensor = sensorService.createSensor(windSpeedSensor);
+
+        Location windDirectionSensorLocation = new Location(nodeLocation);
+        locationRepository.save(windDirectionSensorLocation);
+        Sensor windDirectionSensor = new Sensor("sensor-3", "wind-direction-1", "IBM", new Date(), SensorType.WIND_DIRECTION, windDirectionSensorLocation, node);
+        windDirectionSensor = sensorService.createSensor(windDirectionSensor);
     }
 
     public SmartNode updateSmartNode(SmartNode smartNode){
@@ -138,23 +155,12 @@ public class SmartNodeService {
 
     public SmartNodeData getSmartNodeData(SmartNode smartNode){
 
-        List<Sensor> sensorList =  sensorService.getSensorBySmartNode(smartNode);
-        List<SensorData> sensorDataList = new ArrayList<>();
-
-        sensorList.stream().forEach(sensor -> sensorDataList.add(sensorDataRepository.getSensorData(sensor)));
-
-        return (new SmartNodeData(smartNode.getIdSmartNode(), sensorDataList));
-
+        return null;
     }
 
     public SmartNodeData getSmartNodeDataTest(){
 
-        List<Sensor> sensorList =  sensorService.getSensorBySmartNode(getSmartNodeById(9));
-        List<SensorData> sensorDataList = new ArrayList<>();
-
-        sensorList.stream().forEach(sensor -> sensorDataList.add(sensorDataRepository.getSensorData(sensor)));
-
-        return (new SmartNodeData(9, sensorDataList));
+        return null;
     }
 
     public List<SmartNode> getUnregisteredNodes(){
@@ -164,17 +170,23 @@ public class SmartNodeService {
 
     public SmartNode registeredNode(SmartNode node){
 
-        SmartNode savedNode = smartNodeRepository.findByName(node.getName()).get();
-        Location location = savedNode.getLocation();
+        SmartNode currentNode = smartNodeRepository.findById(node.getInternalId()).get();
+        Location location = currentNode.getLocation();
         location.setIdLocation(node.getLocation().getIdLocation());
         locationRepository.save(location);
 
-        if(savedNode != null){
-            savedNode.setIdSmartNode(node.getIdSmartNode());
-            savedNode.setRegistered(true);
+        if(currentNode != null){
+            currentNode.setIdSmartNode(node.getIdSmartNode());
+            currentNode.setRegistered(true);
         }
-        log.info("Node registered successfully node:{}", savedNode);
+        log.info("Node registered successfully node:{}", currentNode);
+        SmartNode savedNode = smartNodeRepository.save(currentNode);
 
-        return smartNodeRepository.save(savedNode);
+        List<Sensor> sensors = sensorService.getSensorBySmartNode(savedNode);
+        for(Sensor sensor:sensors){
+            registeringService.registerSensor(sensor);
+        }
+
+        return savedNode;
     }
 }

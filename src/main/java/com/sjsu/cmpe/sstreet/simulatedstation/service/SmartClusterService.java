@@ -37,7 +37,6 @@ public class SmartClusterService {
     private Integer clusterZipCode;
 
     private SmartClusterRepository smartClusterRepository;
-    private SmartNodeService smartNodeService;
     private LocationRepository locationRepository;
     private MirroringServerService mirroringServerService;
 
@@ -47,13 +46,11 @@ public class SmartClusterService {
     @Autowired
     public SmartClusterService(
         SmartClusterRepository smartClusterRepository,
-        SmartNodeService smartNodeService,
         LocationRepository locationRepository,
         MirroringServerService mirroringServerService,
         Logger log) {
 
         this.smartClusterRepository = smartClusterRepository;
-        this.smartNodeService = smartNodeService;
         this.locationRepository = locationRepository;
         this.mirroringServerService = mirroringServerService;
         this.log = log;
@@ -175,12 +172,7 @@ public class SmartClusterService {
 
     public SmartClusterData getSmartClusterData(SmartCluster smartCluster){
 
-        List<SmartNode> smartNodeList =  smartNodeService.getSmartNodeBySmartCluster(smartCluster);
-        List<SmartNodeData> smartNodeDataList = new ArrayList<>();
-
-        smartNodeList.stream().forEach(smartNode -> smartNodeDataList.add(smartNodeService.getSmartNodeData(smartNode)));
-
-        return (new SmartClusterData(smartCluster.getIdSmartCluster(), smartNodeDataList));
+        return null;
 
     }
 

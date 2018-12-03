@@ -1,8 +1,6 @@
 package com.sjsu.cmpe.sstreet.simulatedstation.service;
 
 import com.sjsu.cmpe.sstreet.simulatedstation.model.*;
-import com.sjsu.cmpe.sstreet.simulatedstation.repository.data_from_sensors.ISensorDataRepository;
-import com.sjsu.cmpe.sstreet.simulatedstation.repository.data_from_sensors.SensorDataRepository;
 import com.sjsu.cmpe.sstreet.simulatedstation.repository.mysql.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,48 +19,21 @@ public class SensorService {
 
     private SmartNodeRepository smartNodeRepository;
 
-    private ISensorDataRepository sensorDataRepository;
 
     @Autowired
     public SensorService(SensorRepository sensorRepository, SmartNodeRepository smartNodeRepository) {
         this.sensorRepository = sensorRepository;
         this.smartNodeRepository = smartNodeRepository;
-        this.sensorDataRepository = new SensorDataRepository();
     }
 
-    public ResponseEntity<String> createSensor(Sensor sensor) {
+    public Sensor createSensor(Sensor sensor) {
 
-
-        Sensor savedSensor = sensorRepository.save(sensor);
-
-        if (null != savedSensor) {
-
-            return ResponseEntity.ok("Smart Node Created with ID: " + savedSensor.getIdSensor());
-        } else {
-
-            return new ResponseEntity<>("A Smart Node at requested location already exists", HttpStatus.BAD_REQUEST);
-        }
-
+        return sensorRepository.save(sensor);
     }
 
-    public ResponseEntity<String> updateSensor(Sensor sensor) {
+    public Sensor update(Sensor sensor) {
 
-
-        Optional<Sensor> sensorResult = sensorRepository.findById(sensor.getIdSensor());
-
-        if (sensorResult.isPresent()) {
-
-            if (null != sensorRepository.save(sensor)) {
-                return ResponseEntity.ok("Smart Node updated");
-
-            } else {
-                return new ResponseEntity<>("Smart Node  Failed", HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-
-        } else {
-            return new ResponseEntity<>("Smart Node with ID: " + sensor.getIdSensor() + " does not exist", HttpStatus.BAD_REQUEST);
-        }
-
+        return sensorRepository.save(sensor);
     }
 
     public List<Sensor> getAllSensors() {
@@ -139,7 +110,7 @@ public class SensorService {
 
     public SensorData getSensorData(Sensor sensor){
 
-        return sensorDataRepository.getSensorData(sensor);
+        return null;
 
     }
 

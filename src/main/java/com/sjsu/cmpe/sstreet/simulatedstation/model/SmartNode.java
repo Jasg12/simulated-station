@@ -12,7 +12,6 @@ public class SmartNode {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    @JsonIgnore
     private Integer internalId;
 
     private Integer idSmartNode;
@@ -25,7 +24,6 @@ public class SmartNode {
 
     private Date installationDate;
 
-    @JsonIgnore
     private Boolean registered = false;
 
     @OneToOne(cascade = {CascadeType.ALL})

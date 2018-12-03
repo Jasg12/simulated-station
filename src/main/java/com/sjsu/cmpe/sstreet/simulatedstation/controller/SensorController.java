@@ -22,16 +22,15 @@ public class SensorController {
 
 
     @RequestMapping(method = RequestMethod.POST, value = "/create")
-    public @ResponseBody
-    ResponseEntity<String> createSensor(@RequestBody Sensor sensor){
+    public Sensor createSensor(@RequestBody Sensor sensor){
 
         return sensorService.createSensor(sensor);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/update")
-    public @ResponseBody ResponseEntity<String> updateSensor(@RequestBody Sensor sensor){
+    public Sensor updateSensor(@RequestBody Sensor sensor){
 
-        return sensorService.updateSensor(sensor);
+        return sensorService.update(sensor);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/get/all")

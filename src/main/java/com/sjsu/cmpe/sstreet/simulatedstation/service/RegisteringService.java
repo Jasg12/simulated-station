@@ -1,6 +1,7 @@
 package com.sjsu.cmpe.sstreet.simulatedstation.service;
 
 import com.sjsu.cmpe.sstreet.simulatedstation.model.Location;
+import com.sjsu.cmpe.sstreet.simulatedstation.model.Sensor;
 import com.sjsu.cmpe.sstreet.simulatedstation.model.SmartCluster;
 import com.sjsu.cmpe.sstreet.simulatedstation.repository.mysql.LocationRepository;
 import org.slf4j.Logger;
@@ -17,19 +18,27 @@ public class RegisteringService {
     private String mirroringServerUrl;
 
     private final String REGISTER_CLUSTER_API = "/smart_cluster/create";
+    private final String REGISTER_SENSOR_API = "/sensor/create";
 
     private SmartClusterService smartClusterService;
     private LocationRepository locationRepository;
     private RestTemplate restTemplate;
     private Logger log;
+    private SensorService sensorService;
 
     @Autowired
-    public RegisteringService(SmartClusterService smartClusterService, LocationRepository locationRepository, RestTemplate restTemplate, Logger log) {
-
+    public RegisteringService(
+        SmartClusterService smartClusterService,
+        LocationRepository locationRepository,
+        RestTemplate restTemplate,
+        Logger log,
+        SensorService sensorService)
+    {
         this.smartClusterService = smartClusterService;
         this.locationRepository = locationRepository;
         this.restTemplate = restTemplate;
         this.log = log;
+        this.sensorService = sensorService;
     }
 
     public SmartCluster registerCluster(){
@@ -58,4 +67,19 @@ public class RegisteringService {
         return smartCluster;
     }
 
+    public Sensor registerSensor(Sensor sensor){
+        String url = mirroringServerUrl + REGISTER_SENSOR_API;
+        HttpEntity<Sensor> httpEntity = new HttpEntity<>(sensor);
+        Sensor registeredSensor = restTemplate.postForObject(url, httpEntity, Sensor.class);
+        sensor.setIdSensor(registeredSensor.getIdSensor());
+        sensor.setRegistered(true);
+        Location location = sensor.getLocation();
+        location.setIdLocation(registeredSensor.getLocation().getIdLocation());
+        locationRepository.save(location);
+
+        Sensor updatedSensor = sensorService.update(sensor);
+        log.info("New sensor registered in cloud successfully sensor:{}", updatedSensor);
+
+        return updatedSensor;
+    }
 }

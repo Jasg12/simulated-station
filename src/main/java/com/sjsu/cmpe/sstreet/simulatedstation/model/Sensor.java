@@ -28,11 +28,13 @@ public class Sensor {
 
     private Date installationDate;
 
-    private String type;
+    private SensorType type;
 
     private Long dataCollectingInterval = defaultCollectingInterval;
 
     private Date lastDataCollectingTimestamp;
+
+    private Boolean registered = false;
 
     @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name="location_idlocation", unique= true, nullable=true, insertable=true, updatable=true)
@@ -47,7 +49,7 @@ public class Sensor {
         String model,
         String make,
         Date installationDate,
-        String type,
+        SensorType type,
         Location location,
         SmartNode smartNode
     ) {
@@ -61,7 +63,7 @@ public class Sensor {
         this.smartNode = smartNode;
     }
 
-    public Sensor(String name, String model, String make, Date installationDate, String type, Location location) {
+    public Sensor(String name, String model, String make, Date installationDate, SensorType type, Location location) {
 
         this.name = name;
         this.model = model;
@@ -125,12 +127,12 @@ public class Sensor {
         this.installationDate = installationDate;
     }
 
-    public String getType() {
+    public SensorType getType() {
 
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(SensorType type) {
 
         this.type = type;
     }
@@ -183,5 +185,15 @@ public class Sensor {
     public void setInternalId(Integer internalId) {
 
         this.internalId = internalId;
+    }
+
+    public Boolean getRegistered() {
+
+        return registered;
+    }
+
+    public void setRegistered(Boolean registered) {
+
+        this.registered = registered;
     }
 }

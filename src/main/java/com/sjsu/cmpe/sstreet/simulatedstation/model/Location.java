@@ -31,6 +31,16 @@ public class Location {
 
     }
 
+    public Location(Location location){
+        this.longitude = location.getLongitude();
+        this.latitude = location.getLatitude();
+        this.state = location.getState();
+        this.city = location.getCity();
+        this.state = location.getStreet();
+        this.zipCode = location.getZipCode();
+    }
+
+
     public Location(Integer idLocation, double longitude, double latitude, String state, String city, String street, Integer zipCode) {
 
         IdLocation = idLocation;
