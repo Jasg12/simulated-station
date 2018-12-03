@@ -80,6 +80,7 @@ public class SmartClusterService {
         currentCluster.setMake(smartCluster.getMake());
         currentCluster.setUrl(smartCluster.getUrl());
         currentCluster.setIdSmartCluster(smartCluster.getIdSmartCluster());
+        currentCluster.setRegistered(smartCluster.getRegistered());
 
         Location currentLocation = currentCluster.getLocation();
         currentLocation.setIdLocation(smartCluster.getLocation().getIdLocation());

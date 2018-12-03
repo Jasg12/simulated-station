@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import sun.util.resources.cldr.sah.LocaleNames_sah;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,64 +25,44 @@ public class SmartNodeService {
     private SensorService sensorService;
     private Logger log;
     private LocationRepository locationRepository;
+    private MirroringServerService mirroringServerService;
 
     @Autowired
     public SmartNodeService(
         SmartNodeRepository smartNodeRepository,
         SensorService sensorService,
         Logger log,
-        LocationRepository locationRepository)
+        LocationRepository locationRepository,
+        MirroringServerService mirroringServerService)
     {
         this.smartNodeRepository = smartNodeRepository;
         this.sensorDataRepository = new SensorDataRepository();
         this.sensorService = sensorService;
         this.log = log;
         this.locationRepository = locationRepository;
+        this.mirroringServerService = mirroringServerService;
     }
 
-    public ResponseEntity<String> createSmartNode(SmartNode smartNode) {
+    public SmartNode createSmartNode(SmartNode node, SmartCluster cluster) {
 
+        Location location = node.getLocation();
+        location = locationRepository.save(location);
+        node.setSmartCluster(cluster);
+        node.setInstallationDate(new Date());
 
-        SmartNode savedSmartNode = smartNodeRepository.save(smartNode);
-
-        if(null != savedSmartNode){
-
-            return ResponseEntity.ok("Smart Node Created with ID: "+savedSmartNode.getIdSmartNode());
-        }else{
-
-            return new ResponseEntity<>("A Smart Node at requested location already exists", HttpStatus.BAD_REQUEST);
-        }
-
+        return smartNodeRepository.save(node);
     }
 
-    public ResponseEntity<String> updateSmartNode(SmartNode smartNode){
+    public SmartNode updateSmartNode(SmartNode smartNode){
 
-
-
-        Optional<SmartNode> smartNodeResult = smartNodeRepository.findById(smartNode.getIdSmartNode());
-
-        smartNodeResult.ifPresent(result->{
-            smartNode.setName(result.getName());
-            smartNode.setMake(result.getMake());
-            smartNode.setModel(result.getModel());
-            smartNode.setInstallationDate(result.getInstallationDate());
-            smartNode.setSmartCluster(result.getSmartCluster());
-
-        });
-
-        if(smartNodeResult.isPresent()){
-
-            if(null != smartNodeRepository.save(smartNode)){
-                return ResponseEntity.ok("Smart Node updated");
-
-            }else{
-                return new ResponseEntity<>("Smart Node  Failed",HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-
-        }else{
-            return new ResponseEntity<>("Smart Node with ID: " + smartNode.getIdSmartNode()+" does not exist",HttpStatus.BAD_REQUEST);
+        Location location = smartNode.getLocation();
+        location = locationRepository.save(location);
+        SmartNode savedNode = smartNodeRepository.save(smartNode);
+        if(savedNode.getRegistered()){
+            mirroringServerService.updateNode(savedNode);
         }
 
+        return savedNode;
     }
 
     public List<SmartNode> getAllSmartNodes(){
@@ -99,17 +80,7 @@ public class SmartNodeService {
 
     public SmartNode getSmartNodeById(Integer id){
 
-        Optional<SmartNode> smartNodeOptional = smartNodeRepository.findById(id);
-        List<SmartNode> smartNode = new ArrayList<>();
-
-        if(!smartNodeOptional.isPresent()) {
-
-            return null;
-        }
-
-
-        return smartNodeOptional.get();
-
+        return smartNodeRepository.findById(id).get();
     }
 
     public SmartNode getSmartNodeByName(String name){

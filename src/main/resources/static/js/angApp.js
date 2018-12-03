@@ -24,12 +24,12 @@ angular
                 templateUrl: 'view/cluster.html',
                 controller: 'ClusterCtrl'
             })
-            .when('/dashboard/nodes', {
-                templateUrl: 'view/nodes.html',
-                controller: 'NodesCtrl'
+            .when('/dashboard/node/:nodeId', {
+                templateUrl: 'view/node.html',
+                controller: 'NodeCtrl'
             })
             .when('/dashboard/data-manager', {
-                templateUrl: 'view/data-managerView.html',
+                templateUrl: 'view/node.html',
                 controller: 'DataManagerDashboardCtrl'
             })
             .when('/terms',{

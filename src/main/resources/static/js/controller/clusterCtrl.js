@@ -15,6 +15,20 @@ dashboardApp.controller('ClusterCtrl', ['$scope', '$http', '$location', '$rootSc
 
         $scope.cluster = null;
         $scope.registered = null;
+        $scope.nodes = [];
+        $scope.newNode = {
+            name: null,
+            model: null,
+            make: null,
+            location: {
+                longitude: null,
+                latitude: null,
+                state: null,
+                city: null,
+                street: null,
+                zipCode: null
+            }
+        };
 
         calculateViewPortSize();
         $( window ).resize(function () {
@@ -45,6 +59,19 @@ dashboardApp.controller('ClusterCtrl', ['$scope', '$http', '$location', '$rootSc
                 .error(function(error){
                     console.error(error);
                 });
+            getNodes();
+        }
+
+        function getNodes(){
+            var registeredUrl = '/smart_node/nodes';
+            $http.get(registeredUrl)
+                .success(function(data){
+                    console.log('Getting nodes', data);
+                    $scope.nodes = data;
+                })
+                .error(function(error){
+                    console.error(error);
+                });
         }
 
         $scope.submit = function () {
@@ -53,6 +80,19 @@ dashboardApp.controller('ClusterCtrl', ['$scope', '$http', '$location', '$rootSc
             $http.put(url, JSON.stringify($scope.cluster))
                 .success(function(data){
                    console.log('Cluster changes submitted');
+                    gettingCluster();
+                })
+                .error(function(error){
+                    console.error(error);
+                });
+        };
+
+        $scope.addNode = function () {
+            console.log('Add new Node');
+            var url = '/smart_node/create';
+            $http.post(url, JSON.stringify($scope.newNode))
+                .success(function(data){
+                    console.log('Cluster changes submitted');
                     gettingCluster();
                 })
                 .error(function(error){

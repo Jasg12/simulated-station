@@ -1,0 +1,119 @@
+<div class="node-container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="internalId" class="col-sm-2 control-label">InternalId</label>
+                    <div class="col-sm-10">
+                        <p id="internalId" class="form-control-static">{{node.internalId}}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="idSmartNode" class="col-sm-2 control-label">IdSmartNode</label>
+                    <div class="col-sm-10">
+                        <p id="idSmartNode" class="form-control-static">{{node.idSmartNode}}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label">Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="name"  ng-model="node.name">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="model" class="col-sm-2 control-label">Model</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="model"  value="{{node.model}}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="make" class="col-sm-2 control-label">Make</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="make"  ng-model="node.make">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="installationDate" class="col-sm-2 control-label">Installation Date</label>
+                    <div class="col-sm-10">
+                        <p id="installationDate" class="form-control-static">{{node.installationDate}}</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="nodes" class="col-sm-2 control-label">Sensors</label>
+                    <div class="col-sm-10">
+                        <ul id="nodes">
+                            <li ng-repeat="sensor in sensors">
+                                <a href="#/dashboard/sensor/{{sensor.internalId}}">{{sensor.name}}</a>
+                            </li>
+                        </ul>
+                        <!--<button class="btn btn-primary" data-toggle="modal" data-target="#ViewNodesModal">Add Node</button>-->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="registered" class="col-sm-2 control-label">Registered</label>
+                    <div class="col-sm-10">
+                        <p id="registered" class="form-control-static">{{node.registered}}</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="idLocation" class="col-sm-2 control-label">IdLocation</label>
+                    <div class="col-sm-10">
+                        <p id="idLocation" class="form-control-static">{{node.location.idLocation}}</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="longitude" class="col-sm-2 control-label">Longitude</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="longitude"  ng-model="node.location.longitude">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="latitude" class="col-sm-2 control-label">Latitude</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="latitude"  ng-model="node.location.latitude">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="state" class="col-sm-2 control-label">State</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="state"  ng-model="node.location.state">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="city" class="col-sm-2 control-label">City</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="city" placeholder="Email" ng-model="node.location.city">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="street" class="col-sm-2 control-label">Street</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="street" placeholder="Email" ng-model="node.location.street">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="zipCode" class="col-sm-2 control-label">ZipCode</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="zipCode" placeholder="Email" ng-model="node.location.zipCode">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" ng-click="submit()">Submit changes</button>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>

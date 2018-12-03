@@ -15,6 +15,9 @@ public class Sensor {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
+    @JsonIgnore
+    private Integer internalId;
+
     private Integer idSensor;
 
     private String name;
@@ -170,5 +173,15 @@ public class Sensor {
     public void setLastDataCollectingTimestamp(Date lastDataCollectingTimestamp) {
 
         this.lastDataCollectingTimestamp = lastDataCollectingTimestamp;
+    }
+
+    public Integer getInternalId() {
+
+        return internalId;
+    }
+
+    public void setInternalId(Integer internalId) {
+
+        this.internalId = internalId;
     }
 }
