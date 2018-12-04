@@ -15,7 +15,6 @@ public class Sensor {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    @JsonIgnore
     private Integer internalId;
 
     private Integer idSensor;

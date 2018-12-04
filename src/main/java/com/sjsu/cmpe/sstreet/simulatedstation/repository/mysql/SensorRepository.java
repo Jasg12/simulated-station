@@ -12,4 +12,6 @@ public interface SensorRepository extends CrudRepository<Sensor, Integer> {
 
     void deleteBySmartNode(SmartNode smartNode);
 
+    List<Sensor> findAllBySmartNode_IdSmartNode(Integer nodeId);
+
 }

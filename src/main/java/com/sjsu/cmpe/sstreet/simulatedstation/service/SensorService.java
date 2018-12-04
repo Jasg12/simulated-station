@@ -16,14 +16,19 @@ import java.util.Optional;
 public class SensorService {
 
     private SensorRepository sensorRepository;
-
     private SmartNodeRepository smartNodeRepository;
+    private LocationRepository locationRepository;
 
 
     @Autowired
-    public SensorService(SensorRepository sensorRepository, SmartNodeRepository smartNodeRepository) {
+    public SensorService(
+        SensorRepository sensorRepository,
+        SmartNodeRepository smartNodeRepository,
+        LocationRepository locationRepository)
+    {
         this.sensorRepository = sensorRepository;
         this.smartNodeRepository = smartNodeRepository;
+        this.locationRepository = locationRepository;
     }
 
     public Sensor createSensor(Sensor sensor) {
@@ -32,6 +37,9 @@ public class SensorService {
     }
 
     public Sensor update(Sensor sensor) {
+
+        Location location = sensor.getLocation();
+        location = locationRepository.save(location);
 
         return sensorRepository.save(sensor);
     }
@@ -50,17 +58,13 @@ public class SensorService {
 
     public Sensor getSensorById(Integer id) {
 
-        Optional<Sensor> sensorOptional = sensorRepository.findById(id);
-        List<Sensor> sensor = new ArrayList<>();
+        return sensorRepository.findById(id).get();
 
-        if (!sensorOptional.isPresent()) {
+    }
 
-            return null;
-        }
+    public List<Sensor> getAllByNodeId(Integer nodeId){
 
-
-        return sensor.get(0);
-
+        return sensorRepository.findAllBySmartNode_IdSmartNode(nodeId);
     }
 
     public List<Sensor> getSensorBySmartNode(SmartNode smartNode) {

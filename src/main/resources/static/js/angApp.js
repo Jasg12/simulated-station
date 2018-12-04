@@ -28,17 +28,9 @@ angular
                 templateUrl: 'view/node.html',
                 controller: 'NodeCtrl'
             })
-            .when('/dashboard/data-manager', {
-                templateUrl: 'view/node.html',
-                controller: 'DataManagerDashboardCtrl'
-            })
-            .when('/terms',{
-                templateUrl: 'view/terms.html',
-                controller: 'TermsCtrl'
-            })
-            .when('/contacts',{
-                templateUrl: 'view/cluster.html',
-                controller: 'ContactsCtrl'
+            .when('/dashboard/sensor/:sensorId', {
+                templateUrl: 'view/sensor.html',
+                controller: 'SensorCtrl'
             })
             .otherwise({
                 redirectTo: '/'

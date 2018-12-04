@@ -15,6 +15,7 @@ public class SensorController {
 
     private final SensorService sensorService;
 
+
     @Autowired
     public SensorController(SensorService sensorService) {
         this.sensorService = sensorService;
@@ -40,16 +41,16 @@ public class SensorController {
         return sensorService.getAllSensors();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/get/byId/{idSensor}")
-    public @ResponseBody Sensor getSensorById(@PathVariable(value = "idSensor") Integer idSensor){
+    @RequestMapping(method = RequestMethod.GET, value = "/{sensorId}", produces = "application/json")
+    public Sensor getSensorById(@PathVariable(value = "sensorId") Integer sensorId){
 
-        return sensorService.getSensorById(idSensor);
+        return sensorService.getSensorById(sensorId);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/get/bySmartNode")
-    public @ResponseBody List<Sensor> getSensorBySmartNode(@RequestBody SmartNode smartNode){
+    @RequestMapping(method = RequestMethod.GET, value = "/sensors/nodeId/{nodeId}", produces = "application/json")
+    public List<Sensor> getSensorBySmartNode(@PathVariable(value = "nodeId") Integer nodeId){
 
-        return sensorService.getSensorBySmartNode(smartNode);
+        return sensorService.getAllByNodeId(nodeId);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/get/bySmartCluster")

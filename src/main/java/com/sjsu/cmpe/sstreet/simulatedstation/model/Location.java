@@ -10,7 +10,6 @@ public class Location {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    @JsonIgnore
     private Integer internalId;
 
     private Integer IdLocation;
@@ -36,7 +35,7 @@ public class Location {
         this.latitude = location.getLatitude();
         this.state = location.getState();
         this.city = location.getCity();
-        this.state = location.getStreet();
+        this.street = location.getStreet();
         this.zipCode = location.getZipCode();
     }
 

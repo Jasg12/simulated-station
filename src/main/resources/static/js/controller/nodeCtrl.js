@@ -19,6 +19,8 @@ var controller = dashboardApp.controller('NodeCtrl', ['$scope', '$http', '$locat
 
         calculateViewPortSize();
         getNode();
+        getSensors();
+
         $( window ).resize(function () {
             calculateViewPortSize()
         });
@@ -40,11 +42,11 @@ var controller = dashboardApp.controller('NodeCtrl', ['$scope', '$http', '$locat
         }
 
         function getSensors(){
-            var url = '';
+            var url = '/sensor/sensors/nodeId/' + $scope.nodeId;
             $http.get(url)
                 .success(function(data){
-                    console.log('Getting node from server', data);
-                    $scope.node = data;
+                    console.log('Getting sensors from server', data);
+                    $scope.sensors = data;
                 })
                 .error(function(error){
                     console.error(error);
