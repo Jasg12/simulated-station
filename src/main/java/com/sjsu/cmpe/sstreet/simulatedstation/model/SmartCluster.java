@@ -14,7 +14,9 @@ public class SmartCluster {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     @JsonIgnore
-    private Integer internalId;
+    private Integer simulatedId;
+
+    private String serialNumber;
 
     private Integer idSmartCluster;
 
@@ -123,14 +125,24 @@ public class SmartCluster {
         this.nodes = nodes;
     }
 
-    public Integer getInternalId() {
+    public Integer getSimulatedId() {
 
-        return internalId;
+        return simulatedId;
     }
 
-    public void setInternalId(Integer internalId) {
+    public void setSimulatedId(Integer simulatedId) {
 
-        this.internalId = internalId;
+        this.simulatedId = simulatedId;
+    }
+
+    public String getSerialNumber() {
+
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+
+        this.serialNumber = serialNumber;
     }
 
     public Boolean getRegistered() {
@@ -149,7 +161,7 @@ public class SmartCluster {
         sb
             .append("\n")
             .append("{" + "\n")
-            .append("    internalId:" + internalId + "\n")
+            .append("    serialNumber:" + serialNumber + "\n")
             .append("    idSmartCluster:" + idSmartCluster + "\n")
             .append("    registered:" + registered + "\n")
             .append("    name:" + name + "\n")

@@ -35,6 +35,8 @@ public class SmartClusterService {
     private String clusterStreet;
     @Value(value = "${cluster.location.zipCode:unknown}")
     private Integer clusterZipCode;
+    @Value(value = "${cluster.serial.number:unknown}")
+    private String serialNumber;
 
     private SmartClusterRepository smartClusterRepository;
     private LocationRepository locationRepository;
@@ -189,6 +191,7 @@ public class SmartClusterService {
 
     public SmartCluster initiateCluster(){
         SmartCluster smartCluster = new SmartCluster();
+        smartCluster.setSerialNumber(serialNumber);
         smartCluster.setInstallationDate(new Date());
         smartCluster.setMake(clusterMake);
         smartCluster.setModel(clusterModel);

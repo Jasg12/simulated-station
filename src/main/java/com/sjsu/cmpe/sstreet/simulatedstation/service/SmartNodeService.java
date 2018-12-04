@@ -55,16 +55,22 @@ public class SmartNodeService {
     private void createSensorsForNode(SmartNode node){
         Location nodeLocation = node.getLocation();
         Location temperatureSensorLocation = new Location(nodeLocation);
+        temperatureSensorLocation.setLongitude(temperatureSensorLocation.getLongitude() - 0.000051);
+        temperatureSensorLocation.setLatitude(temperatureSensorLocation.getLatitude() + 0.000675);
         locationRepository.save(temperatureSensorLocation);
         Sensor temperatureSensor = new Sensor("sensor-1", "temp-1", "IBM", new Date(), SensorType.TEMPERATURE, temperatureSensorLocation, node);
         temperatureSensor = sensorService.createSensor(temperatureSensor);
 
         Location windSpeedSensorLocation = new Location(nodeLocation);
+        windSpeedSensorLocation.setLongitude(windSpeedSensorLocation.getLongitude() + 0.000418);
+        windSpeedSensorLocation.setLatitude(windSpeedSensorLocation.getLatitude() - 0.000011);
         locationRepository.save(windSpeedSensorLocation);
         Sensor windSpeedSensor = new Sensor("sensor-2", "wind-speed-2", "IBM", new Date(), SensorType.WIND_SPEED, windSpeedSensorLocation, node);
         windSpeedSensor = sensorService.createSensor(windSpeedSensor);
 
         Location windDirectionSensorLocation = new Location(nodeLocation);
+        windDirectionSensorLocation.setLongitude(windDirectionSensorLocation.getLongitude() + 0.000128);
+        windDirectionSensorLocation.setLatitude(windDirectionSensorLocation.getLatitude() + 0.001115);
         locationRepository.save(windDirectionSensorLocation);
         Sensor windDirectionSensor = new Sensor("sensor-3", "wind-direction-1", "IBM", new Date(), SensorType.WIND_DIRECTION, windDirectionSensorLocation, node);
         windDirectionSensor = sensorService.createSensor(windDirectionSensor);

@@ -4,13 +4,13 @@ import com.sjsu.cmpe.sstreet.simulatedstation.model.*;
 import com.sjsu.cmpe.sstreet.simulatedstation.repository.mysql.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class SensorService {
@@ -112,12 +112,65 @@ public class SensorService {
 
     }
 
-    public SensorData getSensorData(Sensor sensor){
+    public SensorData getSensorData(Sensor sensor, SmartCluster cluster){
+
+        switch (sensor.getType()){
+            case TEMPERATURE:
+                return generateTemperatureSensorData(sensor, cluster);
+            case WIND_SPEED:
+                return generateWindSpeedSensorData(sensor, cluster);
+            case WIND_DIRECTION:
+                return generateWindDirectionSensorData(sensor, cluster);
+        }
 
         return null;
-
     }
 
+    private SensorData generateCoreOfSensorData(Sensor sensor, SmartCluster cluster){
+        SensorData sensorData = new SensorData();
+        sensorData.setIdSmartCluster(cluster.getIdSmartCluster());
+        sensorData.setIdSmartNode(sensor.getSmartNode().getIdSmartNode());
+        sensorData.setIdSensor(sensor.getIdSensor());
+        sensorData.setTimestamp(new Date().getTime());
+
+        return sensorData;
+    }
+
+    private SensorData generateTemperatureSensorData(Sensor sensor, SmartCluster cluster){
+        SensorData sensorData = generateCoreOfSensorData(sensor, cluster);
+        sensorData.setType(SensorType.TEMPERATURE);
+        TemperatureSensorValue value = new TemperatureSensorValue();
+        value.setDataType(TemperatureType.C);
+        Random ran = new Random();
+        int temperature = ran.nextInt(35) + 1;
+        value.setTemperature(temperature);
+        sensorData.setValue(value);
+
+        return sensorData;
+    }
+
+    private SensorData generateWindSpeedSensorData(Sensor sensor, SmartCluster cluster){
+        SensorData sensorData = generateCoreOfSensorData(sensor, cluster);
+        sensorData.setType(SensorType.WIND_SPEED);
+        WindSpeedSensorValue value = new WindSpeedSensorValue();
+        value.setDataType(SpeedType.kmh);
+        Random ran = new Random();
+        int speed = ran.nextInt(100) + 1;
+        value.setSpeed(speed);
+        sensorData.setValue(value);
+
+        return sensorData;
+    }
+
+    private SensorData generateWindDirectionSensorData(Sensor sensor, SmartCluster cluster){
+        SensorData sensorData = generateCoreOfSensorData(sensor, cluster);
+        sensorData.setType(SensorType.WIND_DIRECTION);
+        WindDirectionSensorValue value = new WindDirectionSensorValue();
+        value.setDirection(WindDirectionType.getRandomDirection());
+        sensorData.setValue(value);
+
+        return sensorData;
+    }
 }
 
 

@@ -14,11 +14,16 @@ import java.util.List;
 public class SensorController {
 
     private final SensorService sensorService;
+    private SmartClusterService smartClusterService;
 
 
     @Autowired
-    public SensorController(SensorService sensorService) {
+    public SensorController(
+        SensorService sensorService,
+        SmartClusterService smartClusterService)
+    {
         this.sensorService = sensorService;
+        this.smartClusterService = smartClusterService;
     }
 
 
@@ -80,7 +85,9 @@ public class SensorController {
     @RequestMapping(method = RequestMethod.POST, value = "/get/sensorData")
     public @ResponseBody SensorData getSensorData(@RequestBody Sensor sensor){
 
-        return sensorService.getSensorData(sensor);
+        SmartCluster cluster = smartClusterService.getSmartCluster();
+
+        return sensorService.getSensorData(sensor, cluster);
     }
 
 

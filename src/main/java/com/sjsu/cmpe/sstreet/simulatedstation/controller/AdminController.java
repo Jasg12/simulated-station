@@ -33,7 +33,7 @@ public class AdminController {
     public ConnectivityStat getClusterStatus(){
         ConnectivityStat connectivityStat = new ConnectivityStat();
         SmartCluster cluster = smartClusterService.getSmartCluster();
-        connectivityStat.setId(cluster.getInternalId());
+        connectivityStat.setId(cluster.getIdSmartCluster());
         connectivityStat.setEntityType(EntityType.SmartCluster);
         connectivityStat.setStatus(ConnectionStatus.UP);
 
