@@ -11,7 +11,7 @@ public class Sensor {
 
     @org.springframework.data.annotation.Transient
     @JsonIgnore
-    static final Long defaultCollectingInterval =  3600000l; //default interval 1h
+    static final Long defaultCollectingInterval =  7000l; //default interval 1h 3600000l
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
